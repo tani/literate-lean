@@ -1,3 +1,5 @@
+-- -*- mode: markdown -*-
+
 import Literate
 
 # Heading should start markdown mode
@@ -14,3 +16,5 @@ end Literate.Examples
 ~~~
 
 Example should not be evaluated
+
+-- vim: set filetype=markdown :
