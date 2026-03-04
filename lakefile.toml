@@ -1,0 +1,10 @@
+name = "literate"
+version = "0.1.0"
+defaultTargets = ["literate"]
+
+[[lean_lib]]
+name = "Literate"
+
+[[lean_exe]]
+name = "literate"
+root = "Main"
