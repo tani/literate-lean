@@ -11,13 +11,12 @@ def elabLeanFence : CommandElab
   | `(command| ~~~lean $cmds* ~~~) => cmds.forM elabCommand
   | _ => throwError "invalid Lean fenced block"
 
-syntax (name := markdownHeading) "#" ident* : command
 def markdownCodeSpanParser : Parser := leading_parser
   rawCh '`' >> (ident <|> rawIdent <|> nameLit) >> rawCh '`'
 syntax (name := markdownCodeSpan) markdownCodeSpanParser : command
 
 private def isUnsafeToken (s : String) : Bool :=
-  s = "/-" || s = "/--" || s = "/-!" || s = "-/" || s = "\"" || s = "'" || s = "`"
+  ["/-", "/--", "/-!", "-/", "\"", "'", "`"].contains s
 
 private def isSymbolLikeChar (c : Char) : Bool :=
   !c.isWhitespace && !c.isAlpha && !c.isDigit && c ≠ '"' && c ≠ '\'' && c ≠ '`'
@@ -101,24 +100,14 @@ def elabRegisterMarkdownSymbolsFor : CommandElab
 declare_syntax_cat markdownSym
 register_markdown_symbols_for markdownSym
 
+private def inlineGuardKeywords : List String :=
+  [ "def", "theorem", "lemma", "example", "inductive", "structure", "class", "instance"
+  , "namespace", "section", "import", "open", "@[", "~~~lean", "~~~", "~", "end" ]
+
 def markdownInlineGuard : Parser := leading_parser
-  notFollowedBy (symbol "def") "def" >>
-  notFollowedBy (symbol "theorem") "theorem" >>
-  notFollowedBy (symbol "lemma") "lemma" >>
-  notFollowedBy (symbol "example") "example" >>
-  notFollowedBy (symbol "inductive") "inductive" >>
-  notFollowedBy (symbol "structure") "structure" >>
-  notFollowedBy (symbol "class") "class" >>
-  notFollowedBy (symbol "instance") "instance" >>
-  notFollowedBy (symbol "namespace") "namespace" >>
-  notFollowedBy (symbol "section") "section" >>
-  notFollowedBy (symbol "import") "import" >>
-  notFollowedBy (symbol "open") "open" >>
-  notFollowedBy (symbol "@[") "@[" >>
-  notFollowedBy (symbol "~~~lean") "~~~lean" >>
-  notFollowedBy (symbol "~~~") "~~~" >>
-  notFollowedBy (symbol "~") "~" >>
-  notFollowedBy (symbol "end") "end"
+  inlineGuardKeywords.foldl
+    (fun p kw => p >> notFollowedBy (symbol kw) kw)
+    skip
 
 def markdownHashToken : Parser := leading_parser "#" >> optional ident
 def markdownDollarToken : Parser := leading_parser "$" >> optional ident
@@ -134,9 +123,6 @@ def markdownInlineLineParser : Parser := leading_parser
 syntax (name := markdownInlineLine) markdownInlineLineParser : command
 
 def ignoreCommand : CommandElab := fun _ => pure ()
-
-@[command_elab markdownHeading]
-def elabMarkdownHeading : CommandElab := ignoreCommand
 
 @[command_elab markdownCodeSpan]
 def elabMarkdownCodeSpan : CommandElab := ignoreCommand
