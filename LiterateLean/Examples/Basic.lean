@@ -8,10 +8,10 @@
 - list item one
 - list item two
 
-*emphasis* markers * as * inline *
+*emphasis * markers* as **inline**
 
-This line has punctuation : , . ; ! ? and brackets [ ref ] ( "https://example.com" )
-This line has numbers 0 1 2 3 and path / docs / v1
+This line has punctuation : , . ; ! ? and brackets [ref]("https://example.com")
+This line has numbers 0 1 2 3 and path/docs/v1
 
 `a`
 `LiterateLean.Examples.success`
