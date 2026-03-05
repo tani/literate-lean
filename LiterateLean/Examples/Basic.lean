@@ -1,6 +1,6 @@
 -- -*- mode: markdown -*-
 
-import Literate
+import LiterateLean
 
 # Comprehensive markdown coverage
 
@@ -16,10 +16,10 @@ This line has punctuation : , . ; ! ? and brackets [ ref ] ( "https://example.co
 This line has numbers 0 1 2 3 and path / docs / v1
 
 `a`
-`Literate.Examples.success`
+`LiterateLean.Examples.success`
 
 ~~~lean
-namespace Literate.Examples
+namespace LiterateLean.Examples
 
 def success := "first fenced block"
 #check success
@@ -28,13 +28,13 @@ def success := "first fenced block"
 multiline comment in fenced Lean block
 -/
 
-end Literate.Examples
+end LiterateLean.Examples
 ~~~
 
 Interleaving prose after first fenced block
 
 ~~~lean
-namespace Literate.Examples
+namespace LiterateLean.Examples
 
 def answer : Nat := 42
 #check answer
@@ -44,7 +44,7 @@ example (x : Nat) : 0 < match x with
   | n+1 => x + n := by
   grind
 
-end Literate.Examples
+end LiterateLean.Examples
 ~~~
 
 Final prose line should be ignored

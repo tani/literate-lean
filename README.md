@@ -1,7 +1,7 @@
-# Literate Lean 4
+# LiterateLean for Lean 4
 
 
-`literate` is a small Lean 4 library for literate-programming style source files.
+`literate-lean` is a small Lean 4 library for literate-programming style source files.
 It allows markdown-like prose in Lean files while executing explicit `~~~lean` fenced blocks.
 This is a practical example of a [polyglot](https://en.wikipedia.org/wiki/Polyglot_(computing)) source style.
 
@@ -17,20 +17,20 @@ Add this package to your `lakefile.toml`:
 
 ```toml
 [[require]]
-name = "literate"
-git = "https://github.com/tani/literate.git"
+name = "LiterateLean"
+git = "https://github.com/tani/literate-lean.git"
 ```
 
 Then import it:
 
 ```lean
-import Literate
+import LiterateLean
 ```
 
 ## Usage
 
-```markdown
-    import Literate
+```lean
+    import LiterateLean
 
 # This heading is ignored
 
@@ -46,7 +46,7 @@ end Demo
 ~~~
 ```
 
->     import Literate
+>     import LiterateLean
 > 
 > # This heading is ignored
 > 
@@ -65,7 +65,7 @@ end Demo
 
 ```bash
 lake build
-lake env lean Literate/Examples/Basic.lean
+lake env lean LiterateLean/Examples/Basic.lean
 ```
 
 ## Status

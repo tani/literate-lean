@@ -3,7 +3,7 @@ import Lean
 open Lean Elab Command
 open Lean Parser
 
-namespace Literate
+namespace LiterateLean
 
 syntax (name := leanFence) "~~~lean" command* "~~~" : command
 
@@ -50,4 +50,4 @@ def elabMarkdownCodeSpan : CommandElab
 @[command_elab markdownInlineLine]
 def elabMarkdownInlineLine : CommandElab := ignoreCommand
 
-end Literate
+end LiterateLean

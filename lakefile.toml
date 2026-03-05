@@ -1,6 +1,6 @@
-name = "literate"
+name = "LiterateLean"
 version = "0.1.0"
-defaultTargets = ["Literate"]
+defaultTargets = ["LiterateLean"]
 
 [[lean_lib]]
-name = "Literate"
+name = "LiterateLean"
