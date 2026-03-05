@@ -14,4 +14,4 @@ jobs:
       - name: Build package
         run: lake build
       - name: Check basic example
-        run: lake env lean Literate/Examples/Basic.lean
+        run: lake env lean LiterateLean/Examples/Basic.lean
