@@ -26,6 +26,7 @@ syntax "(" : mdChunk
 syntax ")" : mdChunk
 syntax "[" : mdChunk
 syntax "]" : mdChunk
+syntax "<" : mdChunk
 syntax ">" : mdChunk
 syntax "-" : mdChunk
 syntax "*" : mdChunk

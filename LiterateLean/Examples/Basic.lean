@@ -1,5 +1,3 @@
--- -*- mode: markdown -*-
-
 import LiterateLean
 
 # Comprehensive markdown coverage
@@ -49,4 +47,4 @@ end LiterateLean.Examples
 
 Final prose line should be ignored
 
--- vim: set filetype=markdown :
+<!-- vim: set filetype=markdown : -->
