@@ -29,7 +29,7 @@ import Literate
 
 ## Usage
 
-```lean
+```markdown
     import Literate
 
 # This heading is ignored
