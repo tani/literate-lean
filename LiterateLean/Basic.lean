@@ -31,8 +31,14 @@ private partial def skipMarkdownUntilLeanFenceFn (lineStart consumed : Bool) : P
     skipMarkdownUntilLeanFenceFn isNl true c (s.next' c i h)
 
 private def markdownStartToken : Parser := leading_parser
-  symbol "#" <|> symbol ">" <|> symbol "-" <|> symbol "*" <|> symbol "<" <|> symbol "$" <|>
-  rawCh '`' <|> ident <|> rawIdent
+  symbol "#" <|> symbol ">" <|> symbol "-" <|> symbol "*" <|> symbol "<" <|>
+  symbol "$" <|> symbol "[" <|> symbol "(" <|> symbol "!" <|>
+  symbol "+" <|> symbol "=" <|> symbol "_" <|> symbol "~" <|>
+  symbol "|" <|> symbol ":" <|> symbol ";" <|> symbol "," <|> symbol "." <|>
+  symbol "?" <|> symbol "/" <|> symbol "\\" <|> symbol "@" <|>
+  symbol "{" <|> symbol "}" <|> symbol "&" <|> symbol "%" <|> symbol "^" <|>
+  rawCh '`' <|> ident <|> rawIdent <|>
+  numLit <|> strLit <|> charLit <|> scientificLit
 
 private def markdownBlockFn : ParserFn := fun c s =>
   let i := s.pos
