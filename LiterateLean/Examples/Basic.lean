@@ -21,7 +21,7 @@ $$∫^1_0 x dx$$
 `a`
 `LiterateLean.Examples.success`
 
-~~~lean
+```lean
 namespace LiterateLean.Examples
 
 def success := "first fenced block"
@@ -32,11 +32,11 @@ multiline comment in fenced Lean block
 -/
 
 end LiterateLean.Examples
-~~~
+```
 
 Interleaving prose after first fenced block
 
-~~~lean
+```lean
 namespace LiterateLean.Examples
 
 def answer : Nat := 42
@@ -48,7 +48,7 @@ example (x : Nat) : 0 < match x with
   grind
 
 end LiterateLean.Examples
-~~~
+```
 
 Final prose line should be ignored
 
