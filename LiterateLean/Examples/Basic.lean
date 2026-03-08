@@ -1,5 +1,7 @@
     import LiterateLean
 
+今日は良い天気
+
 # Comprehensive markdown coverage
 
 > quoted line one

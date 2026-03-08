@@ -1,4 +1,5 @@
 import Lean
+import LiterateLean.CjkTokens
 
 open Lean Elab Command Parser
 
@@ -30,6 +31,14 @@ private partial def skipMarkdownUntilLeanFenceFn (lineStart consumed : Bool) : P
     let isNl := isNewline c i
     skipMarkdownUntilLeanFenceFn isNl true c (s.next' c i h)
 
+private def isCJKV (c : Char) : Bool :=
+  let v := c.val.toNat
+  List.any cjkvRanges fun (s, e) => s ≤ v && v ≤ e
+
+private def cjkvFn : ParserFn := satisfyFn isCJKV "CJKV letter-like character"
+
+private def cjkv : Parser := withFn (fun _ => cjkvFn) skip
+
 private def markdownStartToken : Parser := leading_parser
   symbol "#" <|> symbol ">" <|> symbol "-" <|> symbol "*" <|> symbol "<" <|>
   symbol "$" <|> symbol "[" <|> symbol "(" <|> symbol "!" <|>
@@ -38,7 +47,7 @@ private def markdownStartToken : Parser := leading_parser
   symbol "?" <|> symbol "/" <|> symbol "\\" <|> symbol "@" <|>
   symbol "{" <|> symbol "}" <|> symbol "&" <|> symbol "%" <|> symbol "^" <|>
   rawCh '`' <|> ident <|> rawIdent <|>
-  numLit <|> strLit <|> charLit <|> scientificLit
+  numLit <|> strLit <|> charLit <|> scientificLit <|> cjkv
 
 private def markdownBlockFn : ParserFn := fun c s =>
   let i := s.pos
