@@ -129,19 +129,19 @@ add_unicode_tokens
 
 private def isUnicode (c : Char) : Bool :=
   let v := c.val.toNat
-  List.any unicodeRanges fun (s, e) => s ≤ v && v ≤ e
+  unicodeRanges.any fun (s, e) => s ≤ v && v ≤ e
 
-private def unicodeFn : ParserFn := satisfyFn isUnicode "Unicode letter-like character"
+private def unicodeFn : ParserFn := satisfyFn isUnicode "CJKV character"
 
 private def unicode : Parser := withFn (fun _ => unicodeFn) skip
 
 private def markdownStartToken : Parser := leading_parser
-  symbol "#" <|> symbol ">" <|> symbol "-" <|> symbol "*" <|> symbol "<" <|>
-  symbol "$" <|> symbol "[" <|> symbol "(" <|> symbol "!" <|>
-  symbol "+" <|> symbol "=" <|> symbol "_" <|> symbol "~" <|>
-  symbol "|" <|> symbol ":" <|> symbol ";" <|> symbol "," <|> symbol "." <|>
-  symbol "?" <|> symbol "/" <|> symbol "\\" <|> symbol "@" <|>
-  symbol "{" <|> symbol "}" <|> symbol "&" <|> symbol "%" <|> symbol "^" <|>
+  symbol "#" <|> symbol "$" <|> symbol "%" <|> symbol "&" <|> symbol "(" <|>
+  symbol ")" <|> symbol "*" <|> symbol "+" <|> symbol "," <|> symbol "-" <|>
+  symbol "." <|> symbol "/" <|> symbol ":" <|> symbol ";" <|> symbol "<" <|>
+  symbol "=" <|> symbol ">" <|> symbol "?" <|> symbol "@" <|> symbol "[" <|>
+  symbol "\\" <|> symbol "]" <|> symbol "^" <|> symbol "_" <|> symbol "{" <|>
+  symbol "|" <|> symbol "}" <|> symbol "~" <|> symbol "!" <|>
   rawCh '`' <|> ident <|> rawIdent <|>
   numLit <|> strLit <|> charLit <|> scientificLit <|> unicode
 
