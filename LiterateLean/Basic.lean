@@ -135,11 +135,39 @@ private def unicodeFn : ParserFn := satisfyFn isUnicode "CJKV character"
 
 private def unicode : Parser := withFn (fun _ => unicodeFn) skip
 
+private def punctuation : Parser :=
+  symbol "!" <|> symbol "\"" <|> symbol "#" <|> symbol "$" <|> symbol "%" <|> symbol "&" <|>
+  symbol "'" <|> symbol "(" <|> symbol ")" <|> symbol "*" <|> symbol "+" <|> symbol "," <|>
+  symbol "-" <|> symbol "." <|> symbol "/" <|> symbol ":" <|> symbol ";" <|> symbol "<" <|>
+  symbol "=" <|> symbol ">" <|> symbol "?" <|> symbol "@" <|> symbol "[" <|> symbol "\\" <|>
+  symbol "]" <|> symbol "^" <|> symbol "_" <|> symbol "`" <|> symbol "{" <|> symbol "|" <|>
+  symbol "}" <|> symbol "~"
+
 private def markdownStartToken : Parser := leading_parser
-  symbol "#" <|> symbol "$" <|> symbol "%" <|> symbol "&" <|> symbol "(" <|>
-  symbol ")" <|> symbol "*" <|> symbol "+" <|> symbol "," <|> symbol "-" <|>
-  symbol "." <|> symbol "/" <|> symbol ":" <|> symbol ";" <|> symbol "<" <|>
-  symbol "=" <|> symbol ">" <|> symbol "?" <|> symbol "@" <|> symbol "[" <|>
+  punctuation <|> rawCh '`' <|> ident <|> rawIdent <|>
+  numLit <|> strLit <|> charLit <|> scientificLit <|> unicode
+
+private def markdownBlockFn : ParserFn := fun c s =>
+  let i := s.pos
+  if c.forbiddenTk? == some "```" then
+    s.mkUnexpectedError "expected Lean command"
+  else if startsWithAt c i "```lean" then
+    s.mkUnexpectedError "expected markdown text"
+  else
+    skipMarkdownUntilLeanFenceFn true false c s
+
+@[command_parser]
+def markdownBlock : Parser := leading_parser
+  lookahead markdownStartToken >> withFn (fun _ => markdownBlockFn) skip
+
+@[command_elab markdownBlock]
+def elabMarkdownBlock : CommandElab := fun _ => pure ()
+
+end LiterateLean
+
+[diff_block_end]
+
+Please note that the above snippet only shows the MODIFIED lines from the last change. It shows up to 3 lines of unchanged lines before and after the modified lines. The actual file contents may have many more lines not shown.
   symbol "\\" <|> symbol "]" <|> symbol "^" <|> symbol "_" <|> symbol "{" <|>
   symbol "|" <|> symbol "}" <|> symbol "~" <|> symbol "!" <|>
   rawCh '`' <|> ident <|> rawIdent <|>
