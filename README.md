@@ -55,10 +55,6 @@ lake build
 lake env lean LiterateLean/Examples/Basic.lean
 ```
 
-## Status
-
-Early version (`0.1.0`). Expect syntax/behavior changes.
-
 ## Copyright
 
-Copyright (c) 2025 Taniguchi Masaya. All Right Reserved.
+Copyright (c) 2025-2026 Taniguchi Masaya. All Right Reserved.
