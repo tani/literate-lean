@@ -106,6 +106,7 @@ import MyLibrary
 
 ```bash
 lake build
+lake test
 lake env lean LiterateLean/Examples/Basic.lean
 ```
 

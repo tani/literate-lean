@@ -1,6 +1,11 @@
 name = "LiterateLean"
-version = "3.0.0"
+version = "3.0.1"
 defaultTargets = ["LiterateLean"]
+testDriver = "literateLeanTests"
 
 [[lean_lib]]
 name = "LiterateLean"
+
+[[lean_exe]]
+name = "literateLeanTests"
+root = "Tests.Main"
