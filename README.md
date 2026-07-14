@@ -4,6 +4,8 @@
 It allows markdown-like prose in Lean files while executing explicit ```` ```lean ```` fenced blocks.
 This is a practical example of a [polyglot](https://en.wikipedia.org/wiki/Polyglot_(computing)) source style.
 
+LiterateLean 2 targets Lean 4.32 and uses Lean's module system.
+
 <img alt="image" src="https://github.com/user-attachments/assets/6534c42a-7009-4117-9ace-b92ea7afa69b" />
 
 ## Features
@@ -47,6 +49,42 @@ def success := "This was evaluated!"
 end Demo
 ```
 ~~~
+
+## Private imports
+
+With Lean's module system, a library can use LiterateLean for its implementation
+without exposing the Markdown command parser to downstream modules:
+
+~~~lean
+module
+
+import LiterateLean
+public import Lean
+
+public section
+
+# Literate library implementation
+
+```lean
+def answer : Nat := 42
+```
+~~~
+
+A public façade can re-export those declarations while keeping LiterateLean private:
+
+```lean
+module
+
+public import MyLibrary.Basic
+```
+
+Downstream files can then remain ordinary Lean:
+
+```lean
+import MyLibrary
+
+#eval answer
+```
 
 ## Development
 

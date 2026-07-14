@@ -1,26 +1,31 @@
-import Lean
+module
+
+public import Lean
+public meta import Lean
+
+public section
 
 open Lean Elab Command Parser
 
 namespace LiterateLean
 
-private def forbiddenTilde : Parser :=
+meta def forbiddenTilde : Parser :=
   withForbidden "```" (categoryParser `command 0)
 
 syntax (name := leanFence) "```lean" forbiddenTilde* "```" : command
 
 @[command_elab leanFence]
-def elabLeanFence : CommandElab
+meta def elabLeanFence : CommandElab
   | `(command| ```lean $cmds* ```) => cmds.forM elabCommand
   | _ => throwError "invalid Lean fenced block"
 
-private def startsWithAt (c : ParserContext) (i : String.Pos.Raw) (pref : String) : Bool :=
+private meta def startsWithAt (c : ParserContext) (i : String.Pos.Raw) (pref : String) : Bool :=
   (String.Pos.Raw.extract c.inputString i c.endPos).startsWith pref
 
-private def isNewline (c : ParserContext) (i : String.Pos.Raw) : Bool :=
+private meta def isNewline (c : ParserContext) (i : String.Pos.Raw) : Bool :=
   if h : c.atEnd i then false else c.get' i h == '\n'
 
-private partial def skipMarkdownUntilLeanFenceFn (lineStart consumed : Bool) : ParserFn := fun c s =>
+private meta partial def skipMarkdownUntilLeanFenceFn (lineStart consumed : Bool) : ParserFn := fun c s =>
   let i := s.pos
   if lineStart && startsWithAt c i "```lean" then
     if consumed then s else s.mkUnexpectedError "expected markdown text"
@@ -30,7 +35,7 @@ private partial def skipMarkdownUntilLeanFenceFn (lineStart consumed : Bool) : P
     let isNl := isNewline c i
     skipMarkdownUntilLeanFenceFn isNl true c (s.next' c i h)
 
-private def unicodeRanges : List (Nat × Nat) := [
+private meta def unicodeRanges : List (Nat × Nat) := [
   -- Hangul Jamo
   (0x1100, 0x11FF),
   -- Enclosed Alphanumerics
@@ -127,15 +132,15 @@ elab "add_unicode_tokens" : command => do
 
 add_unicode_tokens
 
-private def isUnicode (c : Char) : Bool :=
+private meta def isUnicode (c : Char) : Bool :=
   let v := c.val.toNat
   unicodeRanges.any fun (s, e) => s ≤ v && v ≤ e
 
-private def unicodeFn : ParserFn := satisfyFn isUnicode "CJKV character"
+private meta def unicodeFn : ParserFn := satisfyFn isUnicode "CJKV character"
 
-private def unicode : Parser := withFn (fun _ => unicodeFn) skip
+meta def unicode : Parser := withFn (fun _ => unicodeFn) skip
 
-private def punctuation : Parser :=
+meta def punctuation : Parser :=
   symbol "!" <|> symbol "\"" <|> symbol "#" <|> symbol "$" <|> symbol "%" <|> symbol "&" <|>
   symbol "'" <|> symbol "(" <|> symbol ")" <|> symbol "*" <|> symbol "+" <|> symbol "," <|>
   symbol "-" <|> symbol "." <|> symbol "/" <|> symbol ":" <|> symbol ";" <|> symbol "<" <|>
@@ -143,13 +148,15 @@ private def punctuation : Parser :=
   symbol "]" <|> symbol "^" <|> symbol "_" <|> symbol "`" <|> symbol "{" <|> symbol "|" <|>
   symbol "}" <|> symbol "~"
 
-private def markdownStartToken : Parser := leading_parser
+meta def markdownStartToken : Parser := leading_parser
   punctuation <|> rawCh '`' <|> ident <|> rawIdent <|>
   numLit <|> strLit <|> charLit <|> scientificLit <|> unicode
 
-private def markdownBlockFn : ParserFn := fun c s =>
+private meta def markdownBlockFn : ParserFn := fun c s =>
   let i := s.pos
   if c.forbiddenTk? == some "```" then
+    s.mkUnexpectedError "expected Lean command"
+  else if startsWithAt c i "public section" then
     s.mkUnexpectedError "expected Lean command"
   else if startsWithAt c i "```lean" then
     s.mkUnexpectedError "expected markdown text"
@@ -157,10 +164,10 @@ private def markdownBlockFn : ParserFn := fun c s =>
     skipMarkdownUntilLeanFenceFn true false c s
 
 @[command_parser]
-def markdownBlock : Parser := leading_parser
+meta def markdownBlock : Parser := leading_parser
   lookahead markdownStartToken >> withFn (fun _ => markdownBlockFn) skip
 
 @[command_elab markdownBlock]
-def elabMarkdownBlock : CommandElab := fun _ => pure ()
+meta def elabMarkdownBlock : CommandElab := fun _ => pure ()
 
 end LiterateLean
