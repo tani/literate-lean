@@ -1,5 +1,5 @@
 name = "LiterateLean"
-version = "2.0.0"
+version = "3.0.0"
 defaultTargets = ["LiterateLean"]
 
 [[lean_lib]]

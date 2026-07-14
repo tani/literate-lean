@@ -1,4 +1,5 @@
     import LiterateLean
+    open scoped LiterateLean
 
 今日は良い天気
 

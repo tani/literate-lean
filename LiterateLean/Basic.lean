@@ -12,7 +12,9 @@ namespace LiterateLean
 meta def forbiddenTilde : Parser :=
   withForbidden "```" (categoryParser `command 0)
 
-syntax (name := leanFence) "```lean" forbiddenTilde* "```" : command
+scoped syntax (name := leanFence) "```lean" forbiddenTilde* "```" : command
+
+open scoped LiterateLean
 
 @[command_elab leanFence]
 meta def elabLeanFence : CommandElab
@@ -163,9 +165,10 @@ private meta def markdownBlockFn : ParserFn := fun c s =>
   else
     skipMarkdownUntilLeanFenceFn true false c s
 
-@[command_parser]
 meta def markdownBlock : Parser := leading_parser
   lookahead markdownStartToken >> withFn (fun _ => markdownBlockFn) skip
+
+attribute [scoped command_parser] markdownBlock
 
 @[command_elab markdownBlock]
 meta def elabMarkdownBlock : CommandElab := fun _ => pure ()
