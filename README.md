@@ -33,6 +33,14 @@ import LiterateLean
 
 ## Usage
 
+### Source convention
+
+As a convention, indent the header of a LiterateLean file by four spaces. This
+includes commands such as `module`, `import`, `public import`, and
+`public section`. Markdown then displays the header as an indented (implicit)
+code block, while Lean accepts the indentation normally. This is a gentleman's
+agreement for keeping LiterateLean sources readable as both Lean and Markdown.
+
 ~~~lean
     import LiterateLean
 
@@ -56,12 +64,12 @@ With Lean's module system, a library can use LiterateLean for its implementation
 without exposing the Markdown command parser to downstream modules:
 
 ~~~lean
-module
+    module
 
-import LiterateLean
-public import Lean
+    import LiterateLean
+    public import Lean
 
-public section
+    public section
 
 # Literate library implementation
 
