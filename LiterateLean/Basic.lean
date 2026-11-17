@@ -82,7 +82,7 @@ meta def markdownStartToken : Parser := leading_parser
 
 private meta def markdownBlockParserFn : ParserFn := fun c s =>
   let i := s.pos
-  if c.forbiddenTk? == some "```" then
+  if c.forbiddenTks.contains "```" then
     s.mkUnexpectedError "expected Lean command"
   -- Once the literate scope is open, this module command must still reach Lean's parser.
   else if hasDelimitedPrefix c i "public section" then

@@ -4,7 +4,7 @@
 It allows markdown-like prose in Lean files while executing explicit ```` ```lean ```` fenced blocks.
 This is a practical example of a [polyglot](https://en.wikipedia.org/wiki/Polyglot_(computing)) source style.
 
-LiterateLean 3 targets Lean 4.32, uses Lean's module system, and requires
+LiterateLean 3 targets Lean 4.36, uses Lean's module system, and requires
 `open scoped LiterateLean` in files that enable the literate syntax.
 
 <img alt="image" src="https://github.com/user-attachments/assets/6534c42a-7009-4117-9ace-b92ea7afa69b" />

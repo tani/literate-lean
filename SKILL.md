@@ -9,7 +9,7 @@ Produce `.lean` files that read as Markdown and compile as Lean. Keep explanator
 
 ## Project setup
 
-Inspect the target project's `lean-toolchain` and Lake configuration before adding a dependency. This checkout targets `leanprover/lean4:v4.32.0`; do not silently change an existing project's toolchain to match it.
+Inspect the target project's `lean-toolchain` and Lake configuration before adding a dependency. This checkout targets `leanprover/lean4:v4.36.0`; do not silently change an existing project's toolchain to match it.
 
 If LiterateLean is absent, add it to the target project's `lakefile.toml`:
 
